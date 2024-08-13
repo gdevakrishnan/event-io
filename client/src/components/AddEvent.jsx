@@ -1,10 +1,9 @@
 import React, { Fragment, useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import userContext from '../context/userContext';
 import { addEvent } from '../services/serviceWorkers';
 
 function AddEvent() {
-  const initialState = { title: "", desc: "", imglink: "", count: 0, location: "" };
+  const initialState = { title: "", desc: "", imglink: "", count: 0, location: "", organizer: "", date: "" };
   const [eventDetails, setEventDetails] = useState(initialState);
   const { setMsg } = useContext(userContext)
 
@@ -16,7 +15,7 @@ function AddEvent() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (eventDetails.title.trim() == "" || eventDetails.desc.trim() == "" || eventDetails.count.trim() == "" || eventDetails.location.trim() == "" || eventDetails.imglink.trim() == "") {
+    if (eventDetails.title.trim() == "" || eventDetails.desc.trim() == "" || eventDetails.count.trim() == "" || eventDetails.location.trim() == "" || eventDetails.imglink.trim() == "" || eventDetails.organizer.trim() == "" || eventDetails.date.trim() == "") {
       setMsg("Enter all the Fields");
       return;
     }
@@ -67,13 +66,13 @@ function AddEvent() {
           </div>
 
           <div className="form_group">
-            <label htmlFor="count">Count</label>
+            <label htmlFor="organizer">Organizer Name</label>
             <input
-              type="number"
-              name="count"
-              id="count"
+              type="text"
+              name="organizer"
+              id="organizer"
               onChange={(e) => handleEdit(e)}
-              value={eventDetails.count}
+              value={eventDetails.organizer}
             />
           </div>
 
@@ -85,6 +84,28 @@ function AddEvent() {
               id="location"
               onChange={(e) => handleEdit(e)}
               value={eventDetails.location}
+            />
+          </div>
+
+          <div className="form_group">
+            <label htmlFor="date">Date</label>
+            <input
+              type="date"
+              name="date"
+              id="date"
+              onChange={(e) => handleEdit(e)}
+              value={eventDetails.date}
+            />
+          </div>
+
+          <div className="form_group">
+            <label htmlFor="count">Count</label>
+            <input
+              type="number"
+              name="count"
+              id="count"
+              onChange={(e) => handleEdit(e)}
+              value={eventDetails.count}
             />
           </div>
 

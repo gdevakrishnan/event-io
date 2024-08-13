@@ -30,7 +30,7 @@ function Navbar() {
                                         <Link to={'/add-event'} >New</Link>
                                     </li>
                                     <li>
-                                        <Link to={'/'} >Events</Link>
+                                        <Link to={'/events'} >Events</Link>
                                     </li>
                                     <li>
                                         <Link to={'/logout'} >Logout</Link>

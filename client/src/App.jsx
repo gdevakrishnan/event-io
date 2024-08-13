@@ -7,10 +7,11 @@ import Register from './components/Register'
 import Login from './components/Login'
 import Footer from './components/Footer'
 import Message from './components/Message';
-import { userVerify } from './services/ServiceWorkers'
+import { userVerify } from './services/serviceWorkers'
 import PageNotFound from './components/PageNotFound'
 import Logout from './components/Logout'
 import AddEvent from './components/AddEvent'
+import Events from './components/Events'
 
 function App() {
   const [userDetails, setUserDetails] = useState(null);
@@ -50,6 +51,7 @@ function App() {
             <Route path={'/'} index element={<Dashboard />} />
             <Route path={'/register'} element={(userDetails) ? <PageNotFound /> : <Register />} />
             <Route path={'/login'} element={(userDetails) ? <PageNotFound /> : <Login />} />
+            <Route path={'/events'} element={(userDetails) ? <Events /> : <PageNotFound />} />
             <Route path={'/add-event'} element={(userDetails) ? <AddEvent /> : <PageNotFound />} />
             <Route path={'/logout'} element={(userDetails) ? <Logout /> : <PageNotFound />} />
             <Route path={'*'} element={<PageNotFound />} />

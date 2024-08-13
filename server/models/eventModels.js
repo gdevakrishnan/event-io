@@ -25,7 +25,17 @@ const eventSchema = new Schema({
     required: true,
     min: 0
   },
+  organizer: {
+    type: String,
+    required: true,
+    trim: true
+  },
   location: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  date: {
     type: String,
     required: true,
     trim: true

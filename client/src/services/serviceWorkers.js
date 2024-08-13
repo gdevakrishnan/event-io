@@ -23,10 +23,22 @@ export const userVerify = async (userDetails) => {
     return response;
 }
 
+// GET EVENT
+export const getEvents = async () => {
+    const task = await Axios.get(`${BASE_URL}/event/`);
+    const response = task.data;
+    return response;
+}
+
 // ADD NEW EVENT
 export const addEvent = async (eventDetails) => {
     const task = await Axios.post(`${BASE_URL}/event/add-event`, eventDetails);
     const response = task.data;
     return response;
-
 }
+
+export const joinEvent = async (eventId) => {
+    const task = await Axios.post(`${BASE_URL}/event/join/${eventId}`);
+    const response = task.data;
+    return response;
+};
