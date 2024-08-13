@@ -12,7 +12,7 @@
 
 ## Contributors
 [Devakrishnan Gopal](https://www.github.com/gdevakrishnan)
-[Abhinesh P R](https://github.com/abhinesh-ramasamy)
+[Abhinesh P R](https://github.com/abhinesh-pr)
 
 ## License
 
