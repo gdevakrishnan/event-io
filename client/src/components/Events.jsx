@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { getEvents, joinEvent } from '../services/serviceWorkers';
 import userContext from '../context/userContext';
+import jsPDF from 'jspdf';
 
 const Events = () => {
     const [events, setEvents] = useState([]);
@@ -8,8 +9,13 @@ const Events = () => {
     const [error, setError] = useState(null);
 
     const {
-        setMsg
+        setMsg,
+        userDetails
     } = useContext(userContext);
+
+    const {
+        uname
+    } = userDetails;
 
     const fetchEvents = async () => {
         // Fetch events from your API
@@ -25,9 +31,24 @@ const Events = () => {
             });
     };
 
+    // Generate ticket slot in pdf
+    const generateTicket = async (details) => {
+        const doc = new jsPDF();
+
+        doc.setFontSize(14);
+
+        const text = `Slot Number: ${details.event.count}\n\nDear ${details.uname},\nThank you for booking with us! We are pleased to confirm your participation in the following event:\n\n\tEvent Title: ${details.event.title}\n\tEvent Description: ${details.event.desc}\n\tEvent ID: ${details.event._id}\n\tDate of the Event: ${details.event.date}\n\nWe look forward to seeing you there. If you have any questions or need further assistance, please don't hesitate to contact us.\n\nBest regards,\nThe Event Management Team, event-io.`;
+
+        const margin = 20;
+        const maxWidth = 180;
+
+        doc.text(text, margin, margin, { maxWidth });
+        doc.save('ticket.pdf');
+    };
+
     useEffect(() => {
         fetchEvents();
-    }, []); // Empty dependency array means this effect runs once when the component mounts
+    }, []);
 
     if (loading) return <p>Loading events...</p>;
     if (error) return <p>{error}</p>;
@@ -48,14 +69,15 @@ const Events = () => {
                             <p><strong>Location:</strong> {event.location}</p>
                             <p><strong>Available slots:</strong> {event.count}</p>
                             {
-                                (event.count == 0) ? 
-                                <p className='close'>Event is full</p> : null
+                                (event.count == 0) ?
+                                    <p className='close'>Event is full</p> : null
                             }
                             <button onClick={(e) => {
                                 e.preventDefault();
                                 joinEvent(event._id)
                                     .then((response) => {
                                         setMsg(response.message);
+                                        generateTicket({ uname, event });
                                         fetchEvents();
                                     });
                             }}>Book a slot</button>
