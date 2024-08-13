@@ -1,6 +1,7 @@
 import Axios from 'axios';
 
-const BASE_URL = "http://localhost:5000/api";
+// const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "https://event-io-mph6.onrender.com/api";
 
 // REGISTER
 export const createUserDetails = async (userDetails) => {
