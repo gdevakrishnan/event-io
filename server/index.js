@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors');
 const { default: mongoose } = require('mongoose');
 const userRouters = require('./routers/userRouters');
-const path = require('path');
+const eventRouters = require('./routers/eventRouters');
 
 require('dotenv').config();
 const { PORT, MONGO_URI } = process.env;
@@ -23,3 +23,4 @@ mongoose.connect(MONGO_URI)
 
 // Routers Middleware
 app.use('/api', userRouters);
+app.use('/api/event', eventRouters);

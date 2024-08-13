@@ -1,34 +1,64 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { Fragment, useEffect, useState } from 'react'
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom'
+import userContext from './context/userContext'
+import Navbar from './components/Navbar'
+import Dashboard from './components/Dashboard'
+import Register from './components/Register'
+import Login from './components/Login'
+import Footer from './components/Footer'
+import Message from './components/Message';
+import { userVerify } from './services/ServiceWorkers'
+import PageNotFound from './components/PageNotFound'
+import Logout from './components/Logout'
+import AddEvent from './components/AddEvent'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [userDetails, setUserDetails] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      userVerify({ token })
+        .then((response) => {
+          if (response.message == "Verified User") {
+            setUserDetails(response.data);
+          } else {
+            setUserDetails(null);
+          }
+        })
+        .catch((e) => console.log(e.message));
+    } else {
+      setUserDetails(null);
+    }
+  }), [userDetails];
+
+  const [msg, setMsg] = useState(null);
+  const context = {
+    msg,
+    setMsg,
+    userDetails,
+    setUserDetails,
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Fragment>
+      <userContext.Provider value={context}>
+        <Router>
+          <Navbar />
+          <Message />
+          <Routes>
+            <Route path={'/'} index element={<Dashboard />} />
+            <Route path={'/register'} element={(userDetails) ? <PageNotFound /> : <Register />} />
+            <Route path={'/login'} element={(userDetails) ? <PageNotFound /> : <Login />} />
+            <Route path={'/add-event'} element={(userDetails) ? <AddEvent /> : <PageNotFound />} />
+            <Route path={'/logout'} element={(userDetails) ? <Logout /> : <PageNotFound />} />
+            <Route path={'*'} element={<PageNotFound />} />
+          </Routes>
+          <Outlet />
+          <Footer />
+        </Router>
+      </userContext.Provider>
+    </Fragment>
   )
 }
 
